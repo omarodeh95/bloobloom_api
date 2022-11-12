@@ -10,11 +10,13 @@ class Glasses
   end
 
   def initialize(frame, lense)
+
     raise ArgumentError, "It is not a frame" if !frame.is_a? Frame
     raise ArgumentError, "It is not a lense" if !lense.is_a? Lense
     @frame = frame 
     @lense = lense 
     @status = "design"
+
   end
 
   def valid?
@@ -23,35 +25,45 @@ class Glasses
 
   def create
 
-    return 0 if (!self.valid? || @status == "created")
+    return false if (!self.valid? || @status == "created")
 
-    ActiveRecord::Base.transaction(joinable:false, requires_new: true) do
-      @frame.remove_from_stock
-      @lense.remove_from_stock(2)
-      @status = "created"
+    old_frame_stock = self.frame.stock
+    old_lense_stock = self.lense.stock
+  
+    ActiveRecord::Base.transaction do
+      if (@frame.remove_from_stock && @lense.remove_from_stock(2))
+        @status = "created"
+      else
+        puts "making rollback error"
+        raise ActiveRecord::Rollback
+      end
+
+    rescue ActiveRecord::Rollback
+      self.frame.stock = old_frame_stock
+      self.lense.stock = old_lense_stock
+      return false
     end
 
-    rescue ActiveRecord::RecordInvalid
-      return 0
-
-    return 1
+    return true
   end
 
   def discard
 
-    return 0 if (@status != "created")
+    return false if (@status != "created")
 
-    ActiveRecord::Base.transaction(joinable:false, requires_new: true) do
-      @frame.add_to_stock
-      @lense.add_to_stock(2)
-      @status = "design"
+    ActiveRecord::Base.transaction do
+
+      if (@frame.add_to_stock && @lense.add_to_stock(2))
+        @status = "design"
+      else
+        raise ActiveRecord::Rollback
+      end
+
+    rescue ActiveRecord::RollBack
+      return false
     end
 
-    rescue ActiveRecord::RecordInvalid
-      return 0
-
-    self.destroy
-    return 1
+    return true
   end
   
 end

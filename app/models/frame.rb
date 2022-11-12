@@ -13,6 +13,7 @@ class Frame < ApplicationRecord
 
   validates :stock, numericality: { only_integer: true }
   validates :stock, presence: true
+  validates :stock, comparison: {greater_than_or_equal_to: 0}
 
   def can_make_glasses?
     return self.stock > 1
@@ -23,6 +24,12 @@ class Frame < ApplicationRecord
   end
 
   def remove_from_stock(quantity = 1)
-    self.update!(stock: self.stock - quantity)
+    stock = self.stock
+    self.stock -= quantity
+    if !self.save
+      self.stock = stock
+      return false
+    end
+    return true
   end
 end
