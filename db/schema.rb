@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_11_224211) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_12_083811) do
   create_table "frame_prices", force: :cascade do |t|
     t.float "price"
     t.string "currency"
@@ -29,5 +29,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_224211) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "lense_prices", force: :cascade do |t|
+    t.float "price"
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "lense_id"
+    t.index ["lense_id"], name: "index_lense_prices_on_lense_id"
+  end
+
+  create_table "lenses", force: :cascade do |t|
+    t.string "colour"
+    t.text "description"
+    t.string "prescription_type"
+    t.string "lens_type"
+    t.integer "stock"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "frame_prices", "frames"
+  add_foreign_key "lense_prices", "lenses"
 end
