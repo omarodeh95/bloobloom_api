@@ -2,7 +2,6 @@ class Lense < ApplicationRecord
   has_many :lense_prices
 
   validates :id, uniqueness: true
-  validates :id, numericality: { only_integer: true }
 
   validates :colour, presence: true
   

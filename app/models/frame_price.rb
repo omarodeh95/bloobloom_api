@@ -2,7 +2,6 @@ class FramePrice < ApplicationRecord
   belongs_to :frame
 
   validates :id, uniqueness: true
-  validates :id, numericality: { only_integer: true }
 
   validates :price, presence: true
   validates :price,numericality: { only_float: true }

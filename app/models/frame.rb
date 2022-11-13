@@ -3,7 +3,6 @@ class Frame < ApplicationRecord
   has_many :frame_prices
 
   validates :id, uniqueness: true
-  validates :id, numericality: { only_integer: true }
 
   validates :name, presence: true
   
