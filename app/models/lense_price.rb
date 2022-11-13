@@ -2,7 +2,6 @@ class LensePrice < ApplicationRecord
   belongs_to :lense
 
   validates :id, uniqueness: true
-  validates :id, presence:true
   validates :id, numericality: { only_integer: true }
 
   validates :price, presence: true

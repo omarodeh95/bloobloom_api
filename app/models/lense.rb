@@ -2,7 +2,6 @@ class Lense < ApplicationRecord
   has_many :lense_prices
 
   validates :id, uniqueness: true
-  validates :id, presence:true
   validates :id, numericality: { only_integer: true }
 
   validates :colour, presence: true
@@ -16,8 +15,22 @@ class Lense < ApplicationRecord
   validates :stock, presence: true
   validates :stock, comparison: {greater_than_or_equal_to: 0}
 
+  attr_reader :currency, :price
+
+  def currency=(currency)
+    lense_price_info = self.lense_prices.find_by(currency: currency)
+    if lense_price_info
+      @currency = lense_price_info.currency
+      @price = lense_price_info.price
+    else
+      @currency = nil
+      @price = nil
+    end
+  end
+
   def can_make_glasses?
-    return self.stock > 2
+    return true if (self.stock > 1 && @currency)
+    return false
   end
 
   def add_to_stock(quantity = 1)

@@ -1,26 +1,23 @@
 class Glasses
-  attr_reader :frame, :lense, :status
+  attr_reader :frame, :lense, :status, :currency
 
-  def frame=(frame)
-    @status = "design"
-  end
+  def initialize(frame, lense, currency)
 
-  def lense=(lense)
-    @status = "design"
-  end
-
-  def initialize(frame, lense)
-
-    raise ArgumentError, "It is not a frame" if !frame.is_a? Frame
-    raise ArgumentError, "It is not a lense" if !lense.is_a? Lense
     @frame = frame 
     @lense = lense 
+    @currency = currency
+    @frame.currency = @currency
+    @lense.currency = @currency
+    raise ArgumentError, "The currency does not match lense currency" unless (@frame.can_make_glasses? && @lense.can_make_glasses?)
     @status = "design"
 
+  rescue ArgumentError
+    @currency = nil
   end
 
   def valid?
-    return @frame.stock > 0 && @lense.stock > 1
+    return true if @frame.can_make_glasses? && @lense.can_make_glasses? && @currency
+    return false
   end
 
   def create
@@ -34,7 +31,6 @@ class Glasses
       if (@frame.remove_from_stock && @lense.remove_from_stock(2))
         @status = "created"
       else
-        puts "making rollback error"
         raise ActiveRecord::Rollback
       end
 
