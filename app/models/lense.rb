@@ -16,14 +16,16 @@ class Lense < ApplicationRecord
 
   attr_reader :currency, :price
 
-  def currency=(currency)
+  def change_currency (currency)
     lense_price_info = self.lense_prices.find_by(currency: currency)
     if lense_price_info
       @currency = lense_price_info.currency
       @price = lense_price_info.price
+      return true
     else
       @currency = nil
       @price = nil
+      return false
     end
   end
 

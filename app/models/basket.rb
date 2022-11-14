@@ -28,15 +28,20 @@ class Basket
   def checkout_basket
     ActiveRecord::Base.transaction do
       @items.each do |item|
-        raise ActiveRecord::Rollback if !item.create
+        if !item.create
+          raise ActiveRecord::Rollback 
+        end
       end
     rescue ActiveRecord::Rollback
-      @items.each do |item|
-        item.reload
-      end
       return false
     end
     return true
+  end
+
+  def reload_object
+    @items.each do |item|
+      item.reload_object
+    end
   end
 
 end

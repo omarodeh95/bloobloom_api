@@ -1,31 +1,26 @@
 class Glasses
-  attr_reader :frame, :lense, :status, :currency
+  attr_reader :status
+  attr_accessor :frame, :lense, :currency
 
   def initialize(frame, lense, currency)
 
     @frame = frame 
     @lense = lense 
     @currency = currency
-    @frame.currency = @currency
-    @lense.currency = @currency
-    raise ArgumentError, "The currency does not match lense currency" unless (@frame.can_make_glasses? && @lense.can_make_glasses?)
+    @frame.change_currency @currency
+    @lense.change_currency @currency
     @status = "design"
-
-  rescue ArgumentError
-    @currency = nil
+    return false unless (@frame.can_make_glasses? && @lense.can_make_glasses?)
   end
 
   def valid?
-    return true if @frame.can_make_glasses? && @lense.can_make_glasses? && @currency && @status != "created"
+    return true if @frame.can_make_glasses? && @lense.can_make_glasses? && (@currency == @frame.currency && @currency == @lense.currency) && @status != "created"
     return false
   end
 
   def create
 
     return false if (!self.valid? || @status == "created")
-
-    old_frame_stock = self.frame.stock
-    old_lense_stock = self.lense.stock
   
     ActiveRecord::Base.transaction do
       if (@frame.remove_from_stock && @lense.remove_from_stock(2))
@@ -35,8 +30,6 @@ class Glasses
       end
 
     rescue ActiveRecord::Rollback
-      self.frame.stock = old_frame_stock
-      self.lense.stock = old_lense_stock
       return false
     end
 
@@ -61,8 +54,7 @@ class Glasses
 
     return true
   end
-  
-  def reload
+  def reload_object
     @frame.reload
     @lense.reload
   end

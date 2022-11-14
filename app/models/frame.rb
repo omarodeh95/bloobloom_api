@@ -20,14 +20,16 @@ class Frame < ApplicationRecord
     return false
   end
 
-  def currency=(currency)
+  def change_currency (currency)
     frame_price_info = self.frame_prices.find_by(currency: currency)
     if frame_price_info
       @currency = frame_price_info.currency
       @price = frame_price_info.price
+      return true
     else
       @currency = nil
       @price = nil
+      return false
     end
   end
 
