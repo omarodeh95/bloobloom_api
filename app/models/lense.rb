@@ -1,5 +1,5 @@
 class Lense < ApplicationRecord
-  has_many :lense_prices
+  has_many :lense_prices, dependent: :delete_all
 
   validates :id, uniqueness: true
 
@@ -46,5 +46,8 @@ class Lense < ApplicationRecord
       return false
     end
     return true
+  end
+  def self.valid_currencies
+    LensePrice.valid_currencies
   end
 end

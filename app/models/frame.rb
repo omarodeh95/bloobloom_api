@@ -1,6 +1,6 @@
 class Frame < ApplicationRecord
 
-  has_many :frame_prices
+  has_many :frame_prices, dependent: :delete_all
 
   validates :id, uniqueness: true
 
@@ -45,5 +45,8 @@ class Frame < ApplicationRecord
       return false
     end
     return true
+  end
+  def self.valid_currencies
+    FramePrice.valid_currencies
   end
 end

@@ -11,4 +11,10 @@ class LensePrice < ApplicationRecord
   validates :currency, uniqueness: {scope: [:lense_id]}
 
   validates :lense_id, presence: true
+  def self.valid_currencies
+      ["USD", "GBP", "EUR", "JOD", "JPY"]
+  end
+  def valid_currencies
+    LensePrice.valid_currencies
+  end
 end
