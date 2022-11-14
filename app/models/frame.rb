@@ -16,7 +16,7 @@ class Frame < ApplicationRecord
   attr_reader :currency
 
   def can_make_glasses?
-    return true if (self.stock > 1 && @currency)
+    return true if (self.stock > 0 && @currency)
     return false
   end
 

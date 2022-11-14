@@ -16,7 +16,7 @@ class Glasses
   end
 
   def valid?
-    return true if @frame.can_make_glasses? && @lense.can_make_glasses? && @currency
+    return true if @frame.can_make_glasses? && @lense.can_make_glasses? && @currency && @status != "created"
     return false
   end
 
@@ -60,6 +60,11 @@ class Glasses
     end
 
     return true
+  end
+  
+  def reload
+    @frame.reload
+    @lense.reload
   end
   
 end
