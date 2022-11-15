@@ -41,12 +41,13 @@ class Lense < ApplicationRecord
   def remove_from_stock(quantity = 1)
     stock = self.stock
     self.stock -= quantity
-    if !self.save
-      self.stock = stock
-      return false
+    ActiveRecord::Base.transaction(requires_new: true) do
+      self.save
+      return true
     end
-    return true
-  end
+    rescue ActiveRecord::Rollback
+      return false
+end
   def self.valid_currencies
     LensePrice.valid_currencies
   end

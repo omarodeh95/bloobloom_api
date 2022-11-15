@@ -1,6 +1,5 @@
 class Basket
   attr_reader :currency, :items
-  
   def initialize(currency, items = [])
     @currency = currency
     @items = items
@@ -13,8 +12,8 @@ class Basket
     else
       return false
     end
-
   end
+
   def remove_item_no(item_no)
     @items.delete_at(item_no -1)
   end
@@ -26,7 +25,7 @@ class Basket
   end
 
   def checkout_basket
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: true) do
       @items.each do |item|
         if !item.create
           raise ActiveRecord::Rollback 
