@@ -38,6 +38,7 @@ class Frame < ApplicationRecord
   end
 
   def remove_from_stock(quantity = 1)
+    self.reload
     stock = self.stock
     self.stock -= quantity
     ActiveRecord::Base.transaction(requires_new: true) do
