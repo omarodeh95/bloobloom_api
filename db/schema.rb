@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_12_083811) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_16_034234) do
   create_table "frame_prices", force: :cascade do |t|
     t.float "price"
     t.string "currency"
@@ -44,6 +44,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_12_083811) do
     t.string "prescription_type"
     t.string "lens_type"
     t.integer "stock"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "user_name"
+    t.string "password_digest"
+    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
