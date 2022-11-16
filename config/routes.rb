@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   post '/basket/checkout', to: 'basket#checkout_basket'
 
   resources :users
+
+  post '/user/login', to: 'users#login'
   # Defines the root path route ("/")
   # root "articles#index"
 end

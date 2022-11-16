@@ -22,9 +22,10 @@ class UsersController < ApplicationController
       else
         @user = Customer.new(user_params)
       end
-
+    
     if @user.save
-      render json: @user, status: :created, location: @user
+      token = encode_token({user_name: @user.user_name})
+      render json: {user: @user, token: token}, status: :created, location: @user
     else
       render json: @user.errors, status: :unprocessable_entity
     end 
@@ -43,6 +44,17 @@ class UsersController < ApplicationController
     #same validation here 
     @user.destroy
   end 
+
+  def login
+    puts "we are logging you in!!!"
+    @user = User.find_by(user_name: user_params[:user_name])
+    if @user&.authenticate(user_params[:password])
+      token = encode_token({user_id: @user.id)
+      render json: {user: @user, token: token} ,status: :ok
+    else
+      render json: {errors: "Invalid username or password"}, status: :unprocessible_entity
+    end
+  end
 
   private
   def set_user
