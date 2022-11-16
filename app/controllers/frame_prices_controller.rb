@@ -12,7 +12,6 @@ class FramePricesController < ApplicationController
     render json: @frame_price
   end
 
-# POST /frames
   def create
     @frame_price = @frame.frame_prices.build(frame_price_params)
     if @frame_price.save
@@ -22,7 +21,6 @@ class FramePricesController < ApplicationController
     end 
    end 
 
-  # PATCH/PUT /frames/1
   def update
     if @frame_price.update(frame_price_params)
       render json: @frame_price
@@ -31,13 +29,11 @@ class FramePricesController < ApplicationController
     end 
   end 
 
-  # DELETE /frames/1
   def destroy
     @frame_price.destroy
   end 
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_frame_price
     @frame_price = FramePrice.find(params[:id])
   end

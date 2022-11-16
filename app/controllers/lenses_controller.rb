@@ -40,12 +40,10 @@ class LensesController < ApplicationController
   end 
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_lense
     @lense = Lense.find(params[:id])
   end 
 
-  # Only allow a list of trusted parameters through.
   def lense_params
     params.require(:lense).permit(:colour, :description, :prescription_type, :lens_type, :stock)
   end 

@@ -18,7 +18,6 @@ class FramesController < ApplicationController
     render json: json_data
   end
 
-# POST /frames
   def create
     @frame = Frame.new(frame_params)
     if @frame.save
@@ -28,7 +27,6 @@ class FramesController < ApplicationController
     end 
    end 
 
-  # PATCH/PUT /frames/1
   def update
     if @frame.update(frame_prices)
       render json: @frame
@@ -37,18 +35,15 @@ class FramesController < ApplicationController
     end 
   end 
 
-  # DELETE /frames/1
   def destroy
     @frame.destroy
   end 
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_frame
     @frame = Frame.find(params[:id])
   end 
 
-  # Only allow a list of trusted parameters through.
   def frame_params
     params.require(:frame).permit(:name, :description, :status, :stock)
   end 
