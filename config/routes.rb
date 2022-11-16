@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/basket/:item_no', to: 'basket#show'
   post '/basket/checkout', to: 'basket#checkout_basket'
 
+  resources :users
   # Defines the root path route ("/")
   # root "articles#index"
 end
