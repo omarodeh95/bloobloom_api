@@ -49,7 +49,7 @@ class LensesController < ApplicationController
   private
   def set_lense
     filters = {id: params[:id]}
-    if @current_user.type == "customer"
+    if @current_user.type == "Customer"
       filters[:status] = true
     end
     @lense = Lense.find_by(filters)
