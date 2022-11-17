@@ -20,7 +20,8 @@ class FramesController < ApplicationController
   end 
 
   def show
-    json_data = {frame: @frame, frame_prices: @frame.frame_prices}
+    frame_price = @frame.frame_prices.where(currency: session["currency"])
+    json_data = {frame: @frame, frame_prices: frame_price}
     render json: json_data
   end
 

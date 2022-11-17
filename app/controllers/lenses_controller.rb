@@ -1,4 +1,5 @@
 class LensesController < ApplicationController
+  before_action :authorize_user
   before_action :set_lense, only: %i[ show update destroy ]
   before_action :authorize_admin, only: %i[create update destroy]
 
@@ -19,6 +20,7 @@ class LensesController < ApplicationController
   end 
 
   def show
+    lense_prices = @lense.lense_prices.where(currency: session["currency"])
     json_data = {lense: @lense, lense_prices: @lense.lense_prices}
     render json: json_data
   end
@@ -47,7 +49,7 @@ class LensesController < ApplicationController
   private
   def set_lense
     filters = {id: params[:id]}
-    if @current_user.type == "Customer"
+    if @current_user.type == "customer"
       filters[:status] = true
     end
     @lense = Lense.find_by(filters)
