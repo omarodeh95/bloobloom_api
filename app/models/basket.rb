@@ -24,8 +24,8 @@ class Basket
     return item[item_no]
   end
 
-  def checkout_basket
-    ActiveRecord::Base.transaction(requires_new: true) do
+  def checkout_items
+    ActiveRecord::Base.transaction do
       @items.each do |item|
         if !item.create
           raise ActiveRecord::Rollback 

@@ -22,7 +22,7 @@ class Glasses
 
     return false if (!self.valid? || @status == "created")
   
-    ActiveRecord::Base.transaction(requires_new: true) do
+    ActiveRecord::Base.transaction do
       if (@frame.remove_from_stock && @lense.remove_from_stock(2))
         @status = "created"
       else

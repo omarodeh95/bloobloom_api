@@ -1,7 +1,7 @@
 class BasketController < ApplicationController
   before_action :authorize_user
-  before_action :basket_params, only: %i[add_item remove_item]
-  before_action :set_frame_price, only: %i[ show update destroy ]
+  before_action :basket_params, only: %i[add_item remove_item checkout_basket]
+  before_action :authorize_admin, only: %i[ show update destroy ]
 
   def add_item
     basket = session["basket"]
@@ -25,9 +25,9 @@ class BasketController < ApplicationController
     basket = session["basket"]
     index = params[:item_no].to_i - 1
     if basket.delete_at(index)
-      render json: {data: basket, msg: "Item number #{item_no} is removed successfully", status: :ok}
+      render json: {data: basket, msg: "Item number #{params[:item_no]} is removed successfully", status: :ok}
     else
-      render json: {data: basket, msg: "Item number #{item_no} is out of range", status: :ok}
+      render json: {data: basket, msg: "Item number #{params[:item_no]} is not in the basket", status: :ok}
     end
 
   end
@@ -56,16 +56,16 @@ class BasketController < ApplicationController
       lense.change_currency @currency
       glasses = Glasses.new(frame, lense, @currency)
       if !checked_basket.add(glasses)
-        errors.push("#{frame_id} or #{lense_id} for item no #{item_no + 1} are out of stock")
+        errors.push("frame id #{frame_id} or lense id #{lense_id} for item no #{item_no + 1} are out of stock")
       end
     end
 
-    errors.push("could not checkout basket") if (!checked_basket.checkout_basket || errors.any?)
+    errors.push("could not checkout basket") if (!checked_basket.checkout_items || errors.any?)
     if errors.any?
-      render json: {errors: errors , msg: "Basket is not checkoued out", status: :unprocessable_entity}
+      render json: {errors: errors , msg: "Basket is not checked out", status: :unprocessable_entity}
     else
       session["basket"] = []
-      render json: {basket: checked_basket , msg: "Basket is checkoued out successfully", status: :ok}
+      render json: {basket: checked_basket , msg: "Basket is checked out successfully", status: :ok}
     end
 
   end

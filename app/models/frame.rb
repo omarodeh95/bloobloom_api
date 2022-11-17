@@ -41,12 +41,7 @@ class Frame < ApplicationRecord
     self.reload
     stock = self.stock
     self.stock -= quantity
-    ActiveRecord::Base.transaction(requires_new: true) do
-      self.save
-      return true
-    end
-    rescue ActiveRecord::Rollback
-      return false
+    self.save
   end
   def self.valid_currencies
     FramePrice.valid_currencies

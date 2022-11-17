@@ -8,7 +8,7 @@ class Lense < ApplicationRecord
 
   validates :prescription_type, inclusion: {in: ["fashion", "single_vision", "varifocal"]}
 
-  validates :lens_type, inclusion: {in: ["classic", "blue_ligth", "transition"]}
+  validates :lens_type, inclusion: {in: ["classic", "blue_light", "transition"]}
 
   validates :stock, numericality: { only_integer: true }
   validates :stock, presence: true
@@ -42,12 +42,7 @@ class Lense < ApplicationRecord
     self.reload
     stock = self.stock
     self.stock -= quantity
-    ActiveRecord::Base.transaction(requires_new: true) do
-      self.save
-      return true
-    end
-    rescue ActiveRecord::Rollback
-      return false
+    self.save
 end
   def self.valid_currencies
     LensePrice.valid_currencies
