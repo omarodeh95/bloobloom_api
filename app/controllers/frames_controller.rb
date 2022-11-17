@@ -5,10 +5,15 @@ class FramesController < ApplicationController
 
   def index
     json_data = []
-    @frames = Frame.all
+    if @current_user.type == "admin"
+      @frames = Frame.all
+    else
+      @frames = Frame.where(status:true)
+    end
 
     @frames.each do |frame|
-      json_data.push({frame: frame, frame_prices: frame.frame_prices})
+      frame_prices = frame.frame_prices.where(currency: session["currency"])
+      json_data.push({frame: frame, frame_prices: frame_prices}) unless frame_prices.empty?
     end
 
     render json: json_data
@@ -42,7 +47,11 @@ class FramesController < ApplicationController
 
   private
   def set_frame
-    @frame = Frame.find(params[:id])
+    filters = {id: params[:id]}
+    if @current_user.type == "Customer"
+      filters[:status] = true
+    end
+    @frame = Frame.find_by(filters)
   end 
 
   def frame_params

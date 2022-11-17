@@ -1,14 +1,18 @@
 class LensesController < ApplicationController
-
   before_action :set_lense, only: %i[ show update destroy ]
   before_action :authorize_admin, only: %i[create update destroy]
 
   def index
     json_data = []
-    @lenses = Lense.all
 
+    if @current_user.type == "admin"
+      @lenses = Lense.all
+    else
+      @lenses = Lense.where(status:true)
+    end
     @lenses.each do |lense|
-      json_data.push({lense: lense, lense_prices: lense.lense_prices})
+      lense_prices = lense.lense_prices.where(currency: session["currency"])
+      json_data.push({lense: lense, lense_prices: lense_prices})
     end
 
     render json: json_data
@@ -22,7 +26,7 @@ class LensesController < ApplicationController
   def create
     @lense = Lense.new(lense_params)
     if @lense.save
-      render json: @lense, status: :created, location: @lense
+      render json: @lense, status: :created
     else
       render json: @lense.errors, status: :unprocessable_entity
     end 
@@ -42,7 +46,11 @@ class LensesController < ApplicationController
 
   private
   def set_lense
-    @lense = Lense.find(params[:id])
+    filters = {id: params[:id]}
+    if @current_user.type == "Customer"
+      filters[:status] = true
+    end
+    @lense = Lense.find_by(filters)
   end 
 
   def lense_params

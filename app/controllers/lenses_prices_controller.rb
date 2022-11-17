@@ -15,7 +15,7 @@ class LensesPricesController < ApplicationController
   def create
     @lense_price = @lense.lense_prices.build(lense_price_params)
     if @lense_price.save
-      render json: @lense_price, status: :created, location: @lense_lense_price
+      render json: @lense_price, status: :created
     else
       render json: @lense_price.errors, status: :unprocessable_entity
     end 
