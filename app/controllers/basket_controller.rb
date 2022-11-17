@@ -1,7 +1,6 @@
 class BasketController < ApplicationController
   before_action :authorize_user
   before_action :basket_params, only: %i[add_item remove_item checkout_basket]
-  before_action :authorize_admin, only: %i[ show update destroy ]
 
   def add_item
     basket = session["basket"]
