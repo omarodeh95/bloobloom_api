@@ -1,6 +1,7 @@
 class FramesController < ApplicationController
-
+  before_action :authorize_user
   before_action :set_frame, only: %i[ show update destroy ]
+  before_action :authorize_admin, only: %i[create update destroy]
 
   def index
     json_data = []
@@ -21,7 +22,7 @@ class FramesController < ApplicationController
   def create
     @frame = Frame.new(frame_params)
     if @frame.save
-      render json: @frame, status: :created, location: @frame
+      render json: @frame, status: :created
     else
       render json: @frame.errors, status: :unprocessable_entity
     end 

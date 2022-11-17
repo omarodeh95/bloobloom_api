@@ -1,6 +1,7 @@
 class LensesController < ApplicationController
 
   before_action :set_lense, only: %i[ show update destroy ]
+  before_action :authorize_admin, only: %i[create update destroy]
 
   def index
     json_data = []

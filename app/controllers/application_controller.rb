@@ -26,7 +26,11 @@ class ApplicationController < ActionController::API
     end
   end
 
-    def authorize_user
-      render json: {msg: "You have to login first"}, status: :unauthorized unless authorized_user
-    end
+  def authorize_user
+    render json: {msg: "You have to login first"}, status: :unauthorized unless authorized_user
+  end
+
+  def authorize_admin
+    render json: {msg: "You are not authorized to do this action"}, status: :unauthorized unless authorized_user && @current_user.type == "admin"
+  end
 end

@@ -1,5 +1,5 @@
 class FramePricesController < ApplicationController
-
+  before_action :authorize_admin
   before_action :set_frame
   before_action :set_frame_price, only: %i[ show update destroy ]
 

@@ -1,5 +1,5 @@
 class LensesPricesController < ApplicationController
-
+  before_action :authorize_admin
   before_action :set_lense
   before_action :set_lense_price, only: %i[ show update destroy ]
 

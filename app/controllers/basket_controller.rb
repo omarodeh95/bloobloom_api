@@ -1,6 +1,7 @@
 class BasketController < ApplicationController
-  before_action :check_and_set_default_currency
-  before_action :basket_params
+  before_action :authorize_user
+  before_action :basket_params, only: %i[add_item remove_item]
+  before_action :set_frame_price, only: %i[ show update destroy ]
 
   def add_item
     basket = session["basket"]
@@ -46,9 +47,7 @@ class BasketController < ApplicationController
     errors = []
     basket = session["basket"]
     checked_basket = Basket.new(@currency)
-    puts basket.length
     basket.each_with_index do |item,item_no|
-      puts item_no
       frame_id = item["frame_id"]
       lense_id = item["lense_id"]
       frame = Frame.find(frame_id)
@@ -57,7 +56,7 @@ class BasketController < ApplicationController
       lense.change_currency @currency
       glasses = Glasses.new(frame, lense, @currency)
       if !checked_basket.add(glasses)
-        errors.push("#{frame_id} and #{lense_id} for item no #{item_no + 1} cannot be created")
+        errors.push("#{frame_id} or #{lense_id} for item no #{item_no + 1} are out of stock")
       end
     end
 
