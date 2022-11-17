@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end 
 
   def show
-    if @current_user.id == @user.id || @current_user.type == "admin"
+    if @current_user.id == @user.id || @current_user.type == "Admin"
       render json: @user 
     else
       render json: {msg: "You are not authorized to do this action"}, status: :unauthorized 
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   end 
 
   def update
-    if @current_user.id == @user.id || @current_user.type == "admin"
+    if @current_user.id == @user.id || @current_user.type == "Admin"
       if @user.update(user_params)
         render json: @user
       else
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   end 
 
   def destroy
-    if @current_user.id == @user.id || @current_user.type == "admin"
+    if @current_user.id == @user.id || @current_user.type == "Admin"
       @user.destroy
     else
       render json: {msg: "You are not authorized to do this action"}, status: :unauthorized 
