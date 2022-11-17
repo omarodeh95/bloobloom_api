@@ -64,6 +64,7 @@ class BasketController < ApplicationController
     if errors.any?
       render json: {errors: errors , msg: "Basket is not checkoued out", status: :unprocessable_entity}
     else
+      session["basket"] = []
       render json: {basket: checked_basket , msg: "Basket is checkoued out successfully", status: :ok}
     end
 
