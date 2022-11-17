@@ -17,7 +17,7 @@ class LensesController < ApplicationController
 
   def show
     lense_prices = @lense.lense_prices.where(currency: session["currency"])
-    json_data = {lense: @lense, lense_prices: @lense.lense_prices}
+    json_data = {lense: @lense, lense_prices: lense_prices}
     render json: json_data
   end
 
