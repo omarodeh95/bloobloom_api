@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
   
   post '/basket', to: 'basket#add_item'
-  put '/basket/change_currency', to: 'basket#change_currency'
+  put '/change_currency', to: 'currency#change_currency'
   delete '/basket/:item_no', to: 'basket#remove_item'
   get '/basket', to: 'basket#index'
   get '/basket/:item_no', to: 'basket#show'

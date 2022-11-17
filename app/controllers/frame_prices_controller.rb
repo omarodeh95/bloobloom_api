@@ -15,7 +15,7 @@ class FramePricesController < ApplicationController
   def create
     @frame_price = @frame.frame_prices.build(frame_price_params)
     if @frame_price.save
-      render json: @frame_price, status: :created, location: @frame_frame_price
+      render json: @frame_price, status: :created 
     else
       render json: @frame_price.errors, status: :unprocessable_entity
     end 

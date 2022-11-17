@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  before_action :check_and_set_default_currency
 
   include ::ActionController::Cookies
 
@@ -32,5 +33,9 @@ class ApplicationController < ActionController::API
 
   def authorize_admin
     render json: {msg: "You are not authorized to do this action"}, status: :unauthorized unless authorized_user && @current_user.type == "admin"
+  end
+
+  def check_and_set_default_currency
+    session["currency"] ||= "USD"
   end
 end

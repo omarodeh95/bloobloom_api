@@ -80,13 +80,9 @@ class BasketController < ApplicationController
     end
   end
 
-  def check_and_set_default_currency
-    session["currency"] ||= "USD"
-  end
-
   private
   def basket_params
-    @currency = request.params[:basket][:currency]
+    @currency = session["currency"]
     @frame_id = request.params[:basket][:frame_id]
     @lense_id = request.params[:basket][:lense_id]
   end
