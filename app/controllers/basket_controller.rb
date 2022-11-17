@@ -70,17 +70,6 @@ class BasketController < ApplicationController
 
   end
 
-  def change_currency
-    currency = @currency
-    if (Frame.valid_currencies.include?(currency) && Lense.valid_currencies.include?(currency))
-      session["currency"] = currency 
-      session["basket"] = []
-      render json: {msg: "Currency changed to #{currency} successfully", status: :ok}
-    else
-      render json: {msg: "Currency is not valid", status: :unprocessable_entity}
-    end
-  end
-
   private
   def basket_params
     @currency = session["currency"]
