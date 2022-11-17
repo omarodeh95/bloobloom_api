@@ -6,14 +6,10 @@ class LensesController < ApplicationController
   def index
     json_data = []
 
-    if @current_user.type == "admin"
-      @lenses = Lense.all
-    else
-      @lenses = Lense.where(status:true)
-    end
+    @lenses = Lense.all
     @lenses.each do |lense|
       lense_prices = lense.lense_prices.where(currency: session["currency"])
-      json_data.push({lense: lense, lense_prices: lense_prices})
+      json_data.push({lense: lense, lense_prices: lense_prices}) unless lense_prices.empty?
     end
 
     render json: json_data
@@ -49,9 +45,6 @@ class LensesController < ApplicationController
   private
   def set_lense
     filters = {id: params[:id]}
-    if @current_user.type == "Customer"
-      filters[:status] = true
-    end
     @lense = Lense.find_by(filters)
   end 
 

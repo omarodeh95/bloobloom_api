@@ -35,7 +35,7 @@ class FramesController < ApplicationController
    end 
 
   def update
-    if @frame.update(frame_prices)
+    if @frame.update(frame_params)
       render json: @frame
     else
       render json: @frame.errors, status: :unprocessable_entity
