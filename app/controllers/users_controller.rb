@@ -64,7 +64,7 @@ class UsersController < ApplicationController
   private
   def set_user
     @user = User.find(params[:id])
-    params.except(:type) if @user.type == "Customer"
+    params[:user].delete :type if @user.type == "Customer"
   end 
 
   def user_params
